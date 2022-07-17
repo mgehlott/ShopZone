@@ -57,10 +57,11 @@ exports.postAddProduct = (req, res, next) => {
         .then((result) => {
             console.log('created');
             res.redirect('/admin/products');
-        }).catch((err) => {
-            console.log(err);
-        }
-        );
+        }).catch(err => {
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 }
 
 exports.getEditProduct = (req, res, next) => {
@@ -86,7 +87,9 @@ exports.getEditProduct = (req, res, next) => {
                     isAuth: req.session.isLoggedIn
                 });
         }).catch(err => {
-            console.log(err);
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
         });
 }
 
@@ -136,8 +139,10 @@ exports.postEditProdcut = (req, res, next) => {
             });
     })
         .catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 
 
 }
@@ -154,8 +159,10 @@ exports.getProducts = (req, res, next) => {
             });
     })
         .catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 }
 
 exports.deleteProduct = (req, res, next) => {
@@ -166,7 +173,9 @@ exports.deleteProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            console.log(err);
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
         });
 
 

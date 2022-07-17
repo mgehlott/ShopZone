@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator/check');
 
 const transporter = nodemailer.createTransport(sendGrid({
     auth: {
-        api_key: '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'
+        api_key: process.env.SENDGRID_API_KEY
     }
 }));
 
@@ -99,7 +99,9 @@ exports.postSignup = (req, res, next) => {
                 html: '<h1>you have succesfully signup at node shop</h1>'
             });
         }).catch(err => {
-            console.log(err);
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
         });
 }
 
@@ -121,8 +123,6 @@ exports.postLogin = (req, res, next) => {
             validateErrors: errors.array()
         });
     }
-
-
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
@@ -170,8 +170,10 @@ exports.postLogin = (req, res, next) => {
 
 
         }).catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 }
 
 
@@ -228,7 +230,9 @@ exports.postReset = (req, res, next) => {
                 });
             })
             .catch(err => {
-                console.log(err);
+                const errr = new Error(err);
+                errr.httpStatusCode = 500;
+                next(errr);
             });
     });
 }
@@ -258,8 +262,10 @@ exports.getNewPassword = (req, res, next) => {
 
         })
         .catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 }
 
 exports.postNewPassword = (req, res, next) => {
@@ -287,7 +293,9 @@ exports.postNewPassword = (req, res, next) => {
             res.redirect('/login');
         })
         .catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 
 }

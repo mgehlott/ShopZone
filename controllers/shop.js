@@ -8,6 +8,7 @@ exports.getProducts = (req, res, next) => {
     Product.find()
         .then(products => {
             //  console.log(products);
+            throw new Error('not found');
             res.render('shop/product-list',
                 {
                     pageTitle: 'Shop',
@@ -16,8 +17,10 @@ exports.getProducts = (req, res, next) => {
                     isAuth: req.session.isLoggedIn
                 });
         }).catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 
 }
 
@@ -48,8 +51,10 @@ exports.getIndex = (req, res, next) => {
 
             });
     }).catch(err => {
-        console.log(err);
-    })
+        const errr = new Error(err);
+        errr.httpStatusCode = 500;
+        next(errr);
+    });
 }
 
 exports.getCart = (req, res, next) => {
@@ -69,8 +74,10 @@ exports.getCart = (req, res, next) => {
                 })
         })
         .catch(err => {
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 
 }
 
@@ -86,35 +93,6 @@ exports.postCart = (req, res, next) => {
             res.redirect('/cart');
         });
 
-    // let fechedCart;
-    // let newQuantity = 1;
-    // req.user.getCart()
-    //     .then(cart => {
-    //         fechedCart = cart;
-    //         return cart.getProducts({ where: { id: prodId } });
-    //     })
-    //     .then(products => {
-    //         let product;
-    //         if (products.length > 0) {
-    //             product = products[0]
-    //         }
-
-    //         if (product) {
-    //             const oldQuantity = product.cartItem.quantity;
-    //             newQuantity = oldQuantity + 1;
-    //             return product;
-    //         }
-    //         return Product.findByPk(prodId);
-    //     })
-    //     .then(product => {
-    //         return fechedCart.addProduct(product, { through: { quantity: newQuantity } });
-    //     })
-    //     .then(() => {
-    //         res.redirect('/cart');
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
 
 
 }
@@ -129,9 +107,10 @@ exports.postDeleteCartProduct = (req, res, next) => {
             res.redirect('/cart');
         })
         .catch(err => {
-            result
-            console.log(err);
-        })
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
+        });
 
 }
 
@@ -159,7 +138,9 @@ exports.postOrder = (req, res, next) => {
 
         })
         .catch(err => {
-            console.log(err);
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
         });
 }
 
@@ -177,7 +158,9 @@ exports.getOrders = (req, res, next) => {
             );
         })
         .catch(err => {
-            console.log(err);
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
         });
 
 }

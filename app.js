@@ -11,12 +11,15 @@ const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const dotenv = require('dotenv');
 
 
 //const sequelize = require('./utils/database');
 
 const app = express();
-const MONGO_URI = 'mongodb+srv://mgehlott:849551026@cluster0.s0hwb.mongodb.net/shop?retryWrites=true&w=majority';
+dotenv.config({ path: './config.env' });
+const MONGO_URI = process.env.MONGO_URI;
+const PORT = process.env.PORT;
 
 
 const store = new MongoStore({
@@ -50,10 +53,15 @@ app.use((req, res, next) => {
     User.findById(req.session.user._id)
         .then(user => {
             //console.log(user);
+            if (!user) {
+                return next();
+            }
             req.user = user;
             next();
         }).catch(err => {
-            console.log(err);
+            const errr = new Error(err);
+            errr.httpStatusCode = 500;
+            next(errr);
         });
 
 });
@@ -67,14 +75,19 @@ app.use((req, res, next) => {
 app.use('/admin', adminRouter);
 app.use(shopRouter);
 app.use(authRouter);
+app.get('/500', errorController.get500);
 app.use(errorController.get404);
+
+app.use((err, req, res, next) => {
+    res.redirect('/500');
+})
 
 mongoose.connect(MONGO_URI)
     .then(result => {
 
-        app.listen(5000, () => {
+        app.listen(PORT, () => {
             console.log(
-                'server is running at 5000'
+                `server is running at ${PORT}!!`
             );
         });
 
