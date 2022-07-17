@@ -1,0 +1,42 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href= "/css/form.css" />
+</head>
+<%- include('../includes/navigation.ejs') %>
+    <main>
+        <% if(errorMsg) {%>
+            <div class="user-message user-message-error"><%=errorMsg%></div>
+           <%}%>
+        <form class="login-form" action="/signup" method="post" novalidate>
+            <div class="form-control">
+               <label for="email">Email</label>
+               <input
+                class="<%=validateErrors.find(e=>e.param === 'email') ? 'invalid':''%>"
+                type="email"
+                name="email"
+                 id="email"
+                  value="<%=oldInput.email%>"/>
+            </div>
+            <div class="form-control">
+                <label for="password">Password</label>
+                <input 
+                class="<%=validateErrors.find(e=>e.param === 'password') ? 'invalid':''%>"
+                type="password"
+                 name="password"
+                  id="password"
+                   value="<%=oldInput.password%>"/>
+             </div>
+             <div class="form-control">
+                <label for=" confirmpassword">Confirm Password</label>
+                <input
+                class="<%=validateErrors.find(e=>e.param === 'confirmpassword') ? 'invalid':''%>"
+                 type="password"
+                 name="confirmpassword"
+                  id="confirmpassword"
+                value="<%=oldInput.confirmpassword%>"/>
+             </div>
+             <input type="hidden" name="_csrf"  value="<%=csrfToken%>"/>
+           <button type="submit" class="btn">SignUp</button>
+        </form>
+    </main>
+    
+    <%- include('../includes/end.ejs') %>

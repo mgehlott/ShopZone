@@ -1,0 +1,34 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<%- include('../includes/navigation.ejs') %>
+
+    <main>
+
+         <% if( products.length > 0 ){%>
+            <ul>
+                <% products.forEach(p=>{%>
+                    <li>
+                        <p><%= p.productId.title %> (<%= p.quantity%>)</p>
+                        <form action="/delete-cart-item" method="post">
+                            <input type="hidden" name="productId" value="<%= p.productId._id%>" />
+                            <input type="hidden" name="_csrf"  value="<%=csrfToken%>"/>
+                            <button type="submit" class="btn">Delete</button>
+                        </form>
+                        
+                    </li>
+                    <%})%>
+            </ul>
+            <div class="centered">
+               <form action="/create-order" method="post">
+                <input type="hidden" name="_csrf"  value="<%=csrfToken%>"/>
+                  <button class="btn" type="submit">Order Now</button>
+               </form>
+            </div>
+            <%} else {%>
+                 <h1>No Proudcts found in cart</h1>
+                <%}%>
+
+    </main>
+    
+    <%- include('../includes/end.ejs') %>
