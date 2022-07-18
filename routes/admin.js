@@ -19,14 +19,12 @@ router.post('/edit-product', [
     body('title')
         .isString()
         .isLength({ min: 3 }).trim(),
-    body('imgUrl').isURL(),
     body('disc').isLength({ min: 5, max: 400 }).trim()
 ], isAuth, adminController.postEditProdcut);
 router.post('/add-product', [
     body('title')
         .isString()
         .isLength({ min: 3 }).trim(),
-    body('imgUrl').isURL(),
     body('price').notEmpty(),
     body('disc').isLength({ min: 5, max: 400 }).trim()
 ], isAuth, adminController.postAddProduct);
